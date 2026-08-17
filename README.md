@@ -1,201 +1,69 @@
-# 🚦 PalemTraffic: A Novel Hybrid Benchmark Dataset for Spatio-Temporal Graph Neural Networks in Urban Traffic Forecasting
+# 🚦 PalemTraffic V3
+## A Hybrid Spatio-Temporal Benchmark Dataset for Urban Traffic Forecasting
 
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-green.svg)]()
-[![Dataset](https://img.shields.io/badge/Dataset-Spatio--Temporal-orange.svg)]()
+[![Dataset](https://img.shields.io/badge/Dataset-Spatio--Temporal-orange.svg)]
+[![Nodes](https://img.shields.io/badge/Nodes-113-red.svg)]
+[![Timesteps](https://img.shields.io/badge/Timesteps-8640-purple.svg)]
+
+---
 
 ## Overview
 
-**PalemTraffic** is a hybrid spatio-temporal traffic forecasting dataset collected from the urban road network of **Palembang, Indonesia**. The dataset was developed to support research on **traffic forecasting**, **Graph Neural Networks (GNNs)**, **Spatio-Temporal Graph Neural Networks (STGNNs)**, and **Intelligent Transportation Systems (ITS)**.
+**PalemTraffic V3** is a hybrid spatio-temporal traffic forecasting dataset representing an urban road network in **Palembang, Indonesia**.
 
-Unlike conventional benchmark datasets collected from expensive loop detectors or traffic sensors, PalemTraffic combines:
+The dataset is designed for research on:
 
-- Field observations
-- Video-based vehicle detection
-- Automatic vehicle counting
-- Official transportation statistics
-- Expert interviews
-- Semi-synthetic simulation
+- Traffic forecasting
+- Graph Neural Networks (GNNs)
+- Spatio-Temporal Graph Neural Networks (STGNNs)
+- Graph Transformers
+- Intelligent Transportation Systems (ITS)
+- Urban computing
+- Smart-city applications
 
-to produce a realistic traffic dataset suitable for deep learning research.
+PalemTraffic V3 combines an urban road-network topology with traffic-demand patterns designed to reproduce important characteristics of real-world urban traffic, including:
+
+- Different traffic regimes between weekdays and weekends
+- Road-type-dependent traffic volumes
+- Strong morning and evening commuter peaks
+- Day-to-day demand variation
+- Node-specific traffic characteristics
+- Spatial correlation between connected roads
+- Traffic/congestion propagation through neighboring roads
+- Different vehicle-type compositions
+- Low nighttime traffic on residential roads
+- Correlated but non-identical dynamics between neighboring road segments
+
+The dataset is **semi-synthetic**: the road network and node definitions represent the Palembang urban environment, while the traffic time series are generated using a calibrated traffic-demand model informed by observed traffic characteristics and domain assumptions. 20 days of traffic is generated manually, while 10 days of traffic is syntheticaly generated.
+
+This design provides a controlled benchmark while maintaining realistic temporal and spatial traffic behavior.
 
 ---
 
 # Dataset Highlights
 
 | Property | Value |
-|----------|------|
+|---|---|
+| Dataset | **PalemTraffic** |
 | City | Palembang, Indonesia |
-| Road Segments | **113** |
+| Road Nodes | **113** |
+| Main Road Nodes | **31** |
+| Residential Road Nodes | **82** |
 | Time Interval | **5 minutes** |
 | Duration | **30 consecutive days** |
 | Total Timesteps | **8,640** |
-| Graph Type | Directed road network |
-| Data Type | Multivariate Traffic Flow |
+| Observations | **976,320 node-time observations** |
 | Vehicle Categories | **8** |
-| Spatial Representation | Graph |
-| Forecasting Task | Multistep Traffic Forecasting |
+| Tensor Features | **11** |
+| Graph | Urban road connectivity graph |
+| Data Type | `float32` |
+The total number of node-time observations is:
 
----
-
-# Vehicle Categories
-
-Traffic flow is recorded separately for eight vehicle classes.
-
-| Channel | Vehicle Type |
-|----------|-------------|
-| 1 | Motorcycle |
-| 2 | Passenger Car |
-| 3 | Pickup |
-| 4 | Minibus |
-| 5 | Bus |
-| 6 | Truck |
-| 7 | Trailer |
-| 8 | Bicycle / Non-motorized Vehicle |
-
----
-
-# Data Shape
-
-Traffic tensor:
-
-```python
-(T, N, F)
-
-where
-
-T = 8640 timesteps
-N = 113 road segments
-F = traffic features
-```
-
-Example
-
-```python
-traffic.shape
-
-(8640, 113, 8)
-```
-
-where
-
-- 8640 = 30 days × 24 hours × 12 intervals/hour
-- 113 = road segments
-- 8 = vehicle categories
-
----
-
-# Graph Representation
-
-Each node represents a road segment.
-
-Edges represent road connectivity.
-
-```
-Node
-   │
-Road Segment
-
-Edge
-   │
-Physical road connection
-```
-
-The graph is represented by an adjacency matrix
-
-```python
-A ∈ ℝ^(113 × 113)
-```
-
-which can be directly used in Graph Neural Networks.
-
----
-
-# Forecasting Task
-
-Given historical observations
-
-```
-X(t−11), ..., X(t)
-```
-
-predict future traffic
-
-```
-X(t+1), ..., X(t+12)
-```
-
-The dataset supports
-
-- Short-term forecasting
-- Multi-step forecasting
-- Node-level prediction
-- Network-wide prediction
-
----
-
-# Supported Models
-
-PalemTraffic can be used with most modern traffic forecasting models, including
-
-- GraphWaveNet
-- DCRNN
-- STGCN
-- ASTGCN
-- AGCRN
-- STAEformer
-- STEP
-- STID
-- STGAT
-- GCN-LSTM
-- GraphSAGE-LSTM
-- Any custom GNN or Transformer model
-
----
-
-# Example Loading
-
-```python
-import numpy as np
-
-data = np.load("traffic_data.npz")
-
-traffic = data["traffic"]
-
-print(traffic.shape)
-```
-
----
-
-# Benchmark Split
-
-A commonly used split is
-
-| Split | Percentage |
-|--------|-----------|
-| Training | 70% |
-| Validation | 10% |
-| Testing | 20% |
-
-Researchers may use alternative splits depending on their experiments.
-
----
-
-# Research Applications
-
-PalemTraffic is suitable for research in
-
-- Traffic Forecasting
-- Graph Neural Networks
-- Spatio-Temporal Graph Learning
-- Intelligent Transportation Systems
-- Smart Cities
-- Urban Computing
-- Transportation Analytics
-- Time Series Forecasting
-
----
-
+```text
+8,640 timesteps × 113 nodes
+= 976,320 observations
 # Citation
 
 If you use PalemTraffic in your research, please cite:
