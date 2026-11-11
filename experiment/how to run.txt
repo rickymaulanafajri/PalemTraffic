@@ -1,0 +1,2 @@
+python train.py --model graphsage_lstm --epochs 100
+python evaluate.py --model stgcn
